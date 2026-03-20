@@ -1,23 +1,4 @@
 services:
-  postgres:
-    platform: linux/arm64
-    image: postgres:15
-    container_name: foodstore_db
-    environment:
-      POSTGRES_DB: foodstore
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d foodstore"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   app:
     platform: linux/arm64
     build:
@@ -26,12 +7,7 @@ services:
     container_name: foodstore_app
     ports:
       - "3000:3000"
+    env_file:
+      - .env.local
     environment:
-      DATABASE_URL: postgresql://postgres:password@postgres:5432/foodstore
       NODE_ENV: production
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-volumes:
-  postgres_data:

@@ -56,8 +56,8 @@
 - **Node.js** – runtime ผ่าน Next.js
 
 ### Database
-- [PostgreSQL 15](https://www.postgresql.org/) – เก็บข้อมูลสินค้า, ออเดอร์, และ order items
-- **Docker Compose** – รัน PostgreSQL ใน container (`foodstore_db`)
+- [Supabase](https://supabase.com/) (PostgreSQL 15) – cloud database, เก็บข้อมูลสินค้า, ออเดอร์, และ order items
+- เชื่อมต่อผ่าน Supabase Connection Pooler (Supavisor) ที่ `aws-1-ap-southeast-1.pooler.supabase.com:5432`
 
 ### Testing
 - [Jest](https://jestjs.io/) + [ts-jest](https://kulshekhar.github.io/ts-jest/) – unit test สำหรับ business logic การคำนวณ
@@ -164,23 +164,43 @@ Base URL: `http://localhost:3000`
 ## การรันโปรเจกต์
 
 ### ต้องการ
-- [Docker](https://www.docker.com/) + Docker Compose
-- [Colima](https://github.com/abiosoft/colima) (สำหรับ macOS Apple Silicon) หรือ Docker Desktop
+- [Node.js 18+](https://nodejs.org/)
+- ไฟล์ `.env.local` ที่มี `DATABASE_URL` ชี้ไป Supabase (ดู `.env.example`)
 
-### รันด้วย Docker Compose
+### ตั้งค่าครั้งแรก
+
+**1. สร้างตารางใน Supabase**
+
+ไปที่ Supabase Dashboard → **SQL Editor** → วาง SQL จากไฟล์ `db/init.sql` แล้วกด Run
+
+**2. สร้างไฟล์ `.env.local`**
 
 ```bash
-# Build และ Start ครั้งแรก
-docker-compose up -d --build
+cp .env.example .env.local
+# แก้ไข .env.local ใส่ password จริง
+```
 
-# หยุดและลบ volumes (reset DB)
-docker-compose down -v
+### รัน Local Development
 
-# Build ใหม่หลังแก้ไข code
-docker-compose up -d --build
+```bash
+npm install
+npm run dev
 ```
 
 แอปจะรันที่ `http://localhost:3000`
+
+### รันด้วย Docker
+
+```bash
+# Build และ Start
+docker-compose up -d --build
+
+# Build ใหม่หลังแก้ไข code
+docker-compose up -d --build
+
+# หยุด
+docker-compose down
+```
 
 ### รัน Unit Test
 

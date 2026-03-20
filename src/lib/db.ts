@@ -15,8 +15,9 @@ function getPool(): Pool {
   if (!global._pgPool) {
     global._pgPool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      max: 10,
-      idleTimeoutMillis: 30_000,
+      ssl: { rejectUnauthorized: false },
+      max: 3,
+      idleTimeoutMillis: 10_000,
       connectionTimeoutMillis: 5_000,
     });
   }
