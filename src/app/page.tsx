@@ -19,7 +19,8 @@ function BannerImg({ slot }: { slot: 1 | 2 }) {
   const [ts, setTs] = useState(0);
   const [hidden, setHidden] = useState(false);
   useEffect(() => { setTs(Date.now()); }, []);
-  if (hidden || ts === 0) return null;
+  if (hidden) return null;
+  if (ts === 0) return <div className="w-full aspect-[2/3] rounded-2xl bg-gray-100 animate-pulse" />;
   const src = SUPABASE_URL
     ? `${SUPABASE_URL}/storage/v1/object/public/banners/ads-banner-${slot}.jpg?v=${ts}`
     : `/banners/ads-banner-${slot}.jpg?v=${ts}`;
@@ -63,7 +64,7 @@ export default function RootPage() {
       {/* Body: banner | grid | banner — equal 3 columns on lg+, stacked on mobile */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-3 p-3 overflow-y-auto lg:overflow-hidden">
         {/* Left banner — top on mobile, left on desktop */}
-        <div className="flex items-start justify-center order-1 lg:order-none">
+        <div className="flex items-start justify-center">
           <BannerImg slot={1} />
         </div>
 
