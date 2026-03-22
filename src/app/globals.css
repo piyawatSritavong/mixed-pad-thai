@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes bounce-periodic {
+  0%, 70%, 100% { transform: translateY(0) scale(1); animation-timing-function: ease-in; }
+  75%           { transform: translateY(-16px) scale(1.02); animation-timing-function: ease-out; }
+  82%           { transform: translateY(0) scale(1); animation-timing-function: ease-in; }
+  87%           { transform: translateY(-8px) scale(1.01); animation-timing-function: ease-out; }
+  92%           { transform: translateY(0); }
+}
+
+.animate-bounce-periodic {
+  animation: bounce-periodic 4s infinite;
+}
+
 @layer base {
   :root {
     --primary: #9E080F;

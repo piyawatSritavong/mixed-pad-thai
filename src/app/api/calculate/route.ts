@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { items, memberCardNumber } = body;
+  const { items, memberCardNumber, tableNumber } = body;
 
   if (!Array.isArray(items) || items.length === 0) {
     return NextResponse.json(
@@ -99,10 +99,11 @@ export async function POST(req: NextRequest) {
 
     const order = await queryOne<{ id: number }>(
       `INSERT INTO orders
-         (member_card_number, total_before_discount, pair_discount_total, member_card_discount, final_total)
-       VALUES ($1, $2, $3, $4, $5)
+         (table_number, member_card_number, total_before_discount, pair_discount_total, member_card_discount, final_total)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
       [
+        tableNumber ?? null,
         memberCardNumber ?? null,
         result.totalBeforeDiscount,
         pairDiscountTotal,
@@ -110,6 +111,14 @@ export async function POST(req: NextRequest) {
         result.finalTotal,
       ]
     );
+
+    // Update table status to occupied
+    if (tableNumber) {
+      await query(
+        "UPDATE restaurant_tables SET status = 'occupied', updated_at = NOW() WHERE table_number = $1 AND status = 'vacant'",
+        [tableNumber]
+      ).catch(() => {/* table may not exist yet – ignore */});
+    }
 
     if (order) {
       for (const item of items) {
