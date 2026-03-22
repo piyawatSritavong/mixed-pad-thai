@@ -1,18 +1,4 @@
 {
   "/api/tables/route": "app/api/tables/route.js",
-  "/api/admin/dashboard/route": "app/api/admin/dashboard/route.js",
-  "/api/admin/orders/route": "app/api/admin/orders/route.js",
-  "/api/admin/summary/route": "app/api/admin/summary/route.js",
-  "/api/admin/inventory/route": "app/api/admin/inventory/route.js",
-  "/api/admin/reset/route": "app/api/admin/reset/route.js",
-  "/api/admin/tables/route": "app/api/admin/tables/route.js",
-  "/api/admin/members/route": "app/api/admin/members/route.js",
-  "/page": "app/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/orders/page": "app/admin/orders/page.js",
-  "/admin/summary/page": "app/admin/summary/page.js",
-  "/admin/inventory/page": "app/admin/inventory/page.js",
-  "/admin/tables/page": "app/admin/tables/page.js",
-  "/admin/members/page": "app/admin/members/page.js"
+  "/page": "app/page.js"
 }

@@ -90,7 +90,7 @@ export default function RootPage() {
                       className="flex flex-col items-center gap-1.5 transition-all duration-200 active:scale-95 hover:scale-110"
                     >
                       <Image
-                        src="/assets/door.png"
+                        src="/assets/bowl.png"
                         alt={`โต๊ะ ${t.table_number}`}
                         width={120}
                         height={120}
