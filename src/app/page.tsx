@@ -87,7 +87,7 @@ export default function RootPage() {
                     <button
                       key={t.table_number}
                       onClick={() => router.push(`/${t.table_number}`)}
-                      className="flex flex-col items-center gap-1.5 transition-all active:scale-95 hover:opacity-80"
+                      className="flex flex-col items-center gap-1.5 transition-all duration-200 active:scale-95 hover:scale-110"
                     >
                       <Image
                         src="/assets/door.png"

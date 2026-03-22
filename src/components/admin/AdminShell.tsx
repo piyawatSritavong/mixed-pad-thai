@@ -78,6 +78,12 @@ export default function AdminShell({ username, fullName, role, children }: Admin
     router.push("/admin/login");
   }
 
+  async function handleReset() {
+    if (!confirm("⚠️ รีเซ็ตข้อมูลทั้งหมด?\n\nจะลบประวัติออเดอร์ทั้งหมด และรีเซ็ตสถานะโต๊ะทุกโต๊ะให้เป็นว่าง\n\nยืนยันหรือไม่?")) return;
+    await fetch("/api/admin/reset", { method: "POST" });
+    router.refresh();
+  }
+
   const initial = (fullName || username)[0]?.toUpperCase() ?? "A";
   void role;
 
@@ -109,11 +115,15 @@ export default function AdminShell({ username, fullName, role, children }: Admin
           })}
         </nav>
 
-        {/* Avatar + logout */}
+        {/* Avatar (hover → reset) + logout */}
         <div className="py-4 flex flex-col items-center gap-3 border-t border-gray-100 flex-shrink-0">
-          <div className="w-8 h-8 rounded-full bg-[#7A060B] flex items-center justify-center text-white text-xs font-bold">
-            {initial}
-          </div>
+          <button onClick={handleReset} title="รีเซ็ตข้อมูล"
+            className="group w-8 h-8 rounded-full bg-[#7A060B] flex items-center justify-center text-white text-xs font-bold hover:bg-orange-500 transition-colors relative">
+            <span className="group-hover:hidden">{initial}</span>
+            <svg className="hidden group-hover:block w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
           <button onClick={handleLogout} title="Logout"
             className="w-8 h-8 rounded-full flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -134,9 +144,13 @@ export default function AdminShell({ username, fullName, role, children }: Admin
             <span className="font-bold text-[#7A060B] text-sm">ผัดไทยไฟรวม</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-[#7A060B] flex items-center justify-center text-white text-xs font-bold">
-              {initial}
-            </div>
+            <button onClick={handleReset} title="รีเซ็ตข้อมูล"
+              className="group w-7 h-7 rounded-full bg-[#7A060B] flex items-center justify-center text-white text-xs font-bold hover:bg-orange-500 transition-colors">
+              <span className="group-hover:hidden">{initial}</span>
+              <svg className="hidden group-hover:block w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </button>
             <button onClick={handleLogout}
               className="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">

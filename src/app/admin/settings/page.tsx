@@ -31,8 +31,15 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [bannerTs, setBannerTs] = useState<Record<string, number>>({ "1": Date.now(), "2": Date.now() });
+  const [bannerTs, setBannerTs] = useState<Record<string, number>>({ "1": 0, "2": 0 });
+  const [bannerError, setBannerError] = useState<Record<string, boolean>>({ "1": false, "2": false });
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
+
+  // init timestamps client-side to avoid hydration mismatch
+  useEffect(() => {
+    setBannerTs({ "1": Date.now(), "2": Date.now() });
+    fetch("/api/admin/settings").then((r) => r.json()).then(setSettings);
+  }, []);
 
   async function uploadBanner(slot: "1" | "2", file: File) {
     setUploading((p) => ({ ...p, [slot]: true }));
@@ -40,12 +47,11 @@ export default function SettingsPage() {
     fd.append("file", file);
     const res = await fetch(`/api/admin/banners/${slot}`, { method: "POST", body: fd });
     setUploading((p) => ({ ...p, [slot]: false }));
-    if (res.ok) setBannerTs((p) => ({ ...p, [slot]: Date.now() }));
+    if (res.ok) {
+      setBannerError((p) => ({ ...p, [slot]: false }));
+      setBannerTs((p) => ({ ...p, [slot]: Date.now() }));
+    }
   }
-
-  useEffect(() => {
-    fetch("/api/admin/settings").then((r) => r.json()).then(setSettings);
-  }, []);
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
@@ -118,17 +124,23 @@ export default function SettingsPage() {
               <div key={slot} className="flex flex-col gap-3">
                 <p className="text-sm font-semibold text-gray-600">แบนเนอร์ {slot === "1" ? "ซ้าย" : "ขวา"}</p>
                 {/* Preview */}
-                <div className="w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center">
-                  <Image
-                    key={bannerTs[slot]}
-                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""}/storage/v1/object/public/banners/ads-banner-${slot}.jpg`}
-                    alt={`banner ${slot}`}
-                    width={400}
-                    height={533}
-                    className="w-full h-auto object-contain"
-                    unoptimized
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                  />
+                <div className="w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center relative">
+                  {bannerTs[slot] > 0 && !bannerError[slot] ? (
+                    <Image
+                      key={bannerTs[slot]}
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banners/ads-banner-${slot}.jpg?v=${bannerTs[slot]}`}
+                      alt={`banner ${slot}`}
+                      fill
+                      className="object-contain"
+                      unoptimized
+                      onError={() => setBannerError((p) => ({ ...p, [slot]: true }))}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-gray-400">
+                      <span className="text-3xl">🖼️</span>
+                      <p className="text-xs">ยังไม่มีรูป</p>
+                    </div>
+                  )}
                 </div>
                 {/* Upload */}
                 <label className={`cursor-pointer flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-xl py-3 text-sm font-semibold transition-colors ${uploading[slot] ? "opacity-60 pointer-events-none" : "hover:border-[#7A060B] hover:text-[#7A060B] text-gray-500"}`}>
