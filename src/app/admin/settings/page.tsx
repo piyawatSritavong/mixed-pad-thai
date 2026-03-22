@@ -129,10 +129,14 @@ export default function SettingsPage() {
                 <div className="w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center relative">
                   {bannerTs[slot] === 0 ? (
                     <div className="w-full h-full bg-gray-100 animate-pulse" />
-                  ) : SUPABASE_URL && !bannerError[slot] ? (
+                  ) : !bannerError[slot] ? (
                     <Image
                       key={bannerTs[slot]}
-                      src={`${SUPABASE_URL}/storage/v1/object/public/banners/ads-banner-${slot}.jpg?v=${bannerTs[slot]}`}
+                      src={
+                        SUPABASE_URL
+                          ? `${SUPABASE_URL}/storage/v1/object/public/banners/ads-banner-${slot}.jpg?v=${bannerTs[slot]}`
+                          : `/banners/ads-banner-${slot}.jpg?v=${bannerTs[slot]}`
+                      }
                       alt={`banner ${slot}`}
                       fill
                       className="object-contain"
@@ -142,7 +146,7 @@ export default function SettingsPage() {
                   ) : (
                     <div className="flex flex-col items-center gap-2 text-gray-400">
                       <span className="text-3xl">🖼️</span>
-                      <p className="text-xs">{!SUPABASE_URL ? "ไม่ได้ตั้งค่า SUPABASE_URL" : "ยังไม่มีรูป"}</p>
+                      <p className="text-xs">ยังไม่มีรูป</p>
                     </div>
                   )}
                 </div>
