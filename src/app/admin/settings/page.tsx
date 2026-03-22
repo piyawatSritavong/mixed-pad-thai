@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+
 const SECTIONS = [
   {
     title: "ข้อมูลร้าน", icon: "🏪",
@@ -125,10 +127,12 @@ export default function SettingsPage() {
                 <p className="text-sm font-semibold text-gray-600">แบนเนอร์ {slot === "1" ? "ซ้าย" : "ขวา"}</p>
                 {/* Preview */}
                 <div className="w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center relative">
-                  {bannerTs[slot] > 0 && !bannerError[slot] ? (
+                  {bannerTs[slot] === 0 ? (
+                    <div className="w-full h-full bg-gray-100 animate-pulse" />
+                  ) : SUPABASE_URL && !bannerError[slot] ? (
                     <Image
                       key={bannerTs[slot]}
-                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banners/ads-banner-${slot}.jpg?v=${bannerTs[slot]}`}
+                      src={`${SUPABASE_URL}/storage/v1/object/public/banners/ads-banner-${slot}.jpg?v=${bannerTs[slot]}`}
                       alt={`banner ${slot}`}
                       fill
                       className="object-contain"
@@ -138,7 +142,7 @@ export default function SettingsPage() {
                   ) : (
                     <div className="flex flex-col items-center gap-2 text-gray-400">
                       <span className="text-3xl">🖼️</span>
-                      <p className="text-xs">ยังไม่มีรูป</p>
+                      <p className="text-xs">{!SUPABASE_URL ? "ไม่ได้ตั้งค่า SUPABASE_URL" : "ยังไม่มีรูป"}</p>
                     </div>
                   )}
                 </div>
