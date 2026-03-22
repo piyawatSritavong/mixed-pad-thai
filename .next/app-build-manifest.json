@@ -11,6 +11,16 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
+    "/[tableId]/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[tableId]/not-found.js"
+    ],
+    "/[tableId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[tableId]/page.js"
+    ],
     "/api/tables/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

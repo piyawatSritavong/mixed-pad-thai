@@ -60,10 +60,10 @@ export default function RootPage() {
         <p className="text-white/70 text-xs">เลือกโต๊ะของท่านเพื่อเริ่มสั่งอาหาร</p>
       </div>
 
-      {/* Body: banner | grid | banner — equal 3 columns on lg+ */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-3 p-3 overflow-hidden">
-        {/* Left banner */}
-        <div className="hidden lg:flex items-start justify-center">
+      {/* Body: banner | grid | banner — equal 3 columns on lg+, stacked on mobile */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-3 p-3 overflow-y-auto lg:overflow-hidden">
+        {/* Left banner — top on mobile, left on desktop */}
+        <div className="flex items-start justify-center order-1 lg:order-none">
           <BannerImg slot={1} />
         </div>
 
@@ -119,8 +119,8 @@ export default function RootPage() {
           )}
         </div>
 
-        {/* Right banner */}
-        <div className="hidden lg:flex items-start justify-center">
+        {/* Right banner — bottom on mobile, right on desktop */}
+        <div className="flex items-start justify-center">
           <BannerImg slot={2} />
         </div>
       </div>
