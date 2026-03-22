@@ -111,7 +111,7 @@ export default function MembersPage() {
                 <div key={field}>
                   <label className="block text-xs font-semibold text-gray-500 mb-1.5">{label}</label>
                   <input type={type} disabled={"disabled" in rest ? rest.disabled : false}
-                    value={(modal.data as Record<string, string>)[field] ?? ""}
+                    value={(modal.data as unknown as Record<string, string>)[field] ?? ""}
                     onChange={(e) => setModal((p) => ({ ...p, data: { ...p.data, [field]: e.target.value } }))}
                     className="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7A060B]/20 bg-[#F5F0EB] disabled:opacity-60" />
                 </div>
